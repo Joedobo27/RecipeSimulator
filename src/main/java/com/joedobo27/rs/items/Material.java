@@ -1,0 +1,111 @@
+package com.joedobo27.rs.items;
+
+public enum Material {
+    NONE("none", 0) ,
+    FLESH("flesh", 1),
+    MEAT("meat", 2),
+    RYE("rye", 3),
+    OAT("oat", 4),
+    BARLEY("barley", 5),
+    WHEAT("wheat", 6),
+    GOLD("gold", 7),
+    SILVER("silver", 8),
+    STEEL("steel", 9),
+    COPPER("copper", 10),
+    IRON("iron", 11),
+    LEAD("lead", 12),
+    ZINC("zinc", 13),
+    BIRCHWOOD("birchwood", 14),
+    STONE("stone", 15),
+    LEATHER("leather", 16),
+    COTTON("cotton", 17),
+    CLAY("clay", 18),
+    POTTERY("pottery", 19),
+    GLASS("glass", 20),
+    MAGIC("magic", 21),
+    VEGETARIAN("vegetarian", 22),
+    FIRE("fire", 23),
+    OIL("oil", 25),
+    WATER("water", 26),
+    CHARCOAL("charcoal", 27),
+    DAIRY("dairy", 28),
+    HONE("hone", 29),
+    BRASS("brass", 30),
+    BRONZE("bronze", 31),
+    FAT("fat", 32),
+    PAPER("paper", 33),
+    TIN("tin", 34),
+    BONE("bone", 35),
+    SALT("salt", 36),
+    PINEWOOD("pinewood", 37),
+    OAKENWOOD("oakenwood", 38),
+    CEDARWOOD("cedarwood", 39),
+    WILLOW("willow", 40),
+    MAPLEWOOD("maplewood", 41),
+    APPLEWOOD("applewood", 42),
+    LEMONWOOD("lemonwood", 43),
+    OLIVEWOOD("olivewood", 44),
+    CHERRYWOOD("cherrywood", 45),
+    LAVENDERWOOD("lavenderwood", 46),
+    ROSEWOOD("rosewood", 47),
+    THORN("thorn", 48),
+    GRAPEWOOD("grapewood", 49),
+    CAMELLIAWOOD("camelliawood", 50),
+    OLEANDERWOOD("oleanderwood", 51),
+    CRYSTAL("crystal", 52),
+    WEMP("wemp", 53),
+    DIAMOND("diamond", 54),
+    ANIMAL("animal", 55),
+    ADAMANTINE("adamantine", 56),
+    GLIMMERSTEEL("glimmersteel", 57),
+    TAR("tar", 58),
+    PEAT("peat", 59),
+    REED("reed", 60),
+    SLATE("slate", 61),
+    MARBLE("marble", 62),
+    CHESTNUT("chestnut", 63),
+    WALNUT("walnut", 64),
+    FIRWOOD("firwood", 65),
+    LINDENWOOD("lindenwood", 66),
+    SERYLL("seryll", 67),
+    IVY("ivy", 68),
+    WOOL("wool", 69),
+    STRAW("straw", 70),
+    HAZELNUTWOOD("hazelnutwood", 71),
+    BEAR("bear", 72),
+    BEEF("beef", 73),
+    CANINE("canine", 74),
+    FELINE("feline", 75),
+    DRAGON("dragon", 76),
+    FOWL("fowl", 77),
+    GAME("game", 78),
+    HORSE("horse", 79),
+    HUMAN("human", 80),
+    HUMANOID("humanoid", 81),
+    INSECT("insect", 82),
+    LAMB("lamb", 83),
+    PORK("pork", 84),
+    SEAFOOD("seafood", 85),
+    SNAKE("snake", 86),
+    TOUGH("tough", 87),
+    ORANGEWOOD("orangewood", 88),
+    RASPBERRYWOOD("raspberrywood", 90),
+    BLUEBERRYWOOD("blueberrywood", 91),
+    LINGONBERRYWOOD("lingonberrywood", 92);
+
+    private final String name;
+    private final int id;
+
+    Material(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+}

@@ -1,0 +1,104 @@
+static ArrayList<String[]> templates = new ArrayList<>();
+static ArrayList<String> formatedLines = new ArrayList<>();
+//  sharedClassLoader=false  in properties.
+
+@Override
+public void init() {
+    try {
+        CtClass returnType = HookManager.getInstance().getClassPool().get(
+                "com.wurmonline.server.items.ItemTemplate");
+        CtClass[] paramTypes = new CtClass[] {
+                CtPrimitiveType.intType, // int templateId
+                CtPrimitiveType.intType, // int size
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String name
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String plural
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String itemDescriptionSuperb
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String itemDescriptionNormal
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String itemDescriptionBad
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String itemDescriptionRotten
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String itemDescriptionLong
+                Descriptor.toCtClass("[S", HookManager.getInstance().getClassPool()), // short[] itemTypes
+                CtPrimitiveType.shortType, // short imageNumber
+                CtPrimitiveType.shortType, // short behaviourType
+                CtPrimitiveType.intType, // int combatDamag
+                CtPrimitiveType.longType, // long decayTime
+                CtPrimitiveType.intType, // int centimetersX
+                CtPrimitiveType.intType, // int centimetersY
+                CtPrimitiveType.intType, // int centimetersZ
+                CtPrimitiveType.intType, // int primarySkill
+                Descriptor.toCtClass("[B", HookManager.getInstance().getClassPool()), // byte[] bodySpaces
+                HookManager.getInstance().getClassPool().get("java.lang.String"), // String modelName
+                CtPrimitiveType.floatType, // float difficulty
+                CtPrimitiveType.intType, // int weight
+                CtPrimitiveType.byteType, // byte material
+                CtPrimitiveType.intType, // int value
+                CtPrimitiveType.booleanType, // boolean isTraded
+                CtPrimitiveType.intType, // int armourType
+                CtPrimitiveType.intType, // int dyeAmountOverrideGrams
+        };
+
+        HookManager.getInstance().registerHook("com.wurmonline.server.items.ItemTemplateFactory",
+                "createItemTemplate",
+                Descriptor.ofMethod(returnType, paramTypes), new InvocationHandlerFactory() {
+                    @Override
+                    public InvocationHandler createInvocationHandler() {
+                        return new InvocationHandler() {
+                            @Override
+                            public Object invoke(Object object, Method method, Object[] args) throws Throwable {
+                                int id = (int)args[0];
+                                String name = (String)args[2];
+                                short[] types = (short[])args[9];
+                                com.joedobo27.flc.FasterLiquorCreationMod.addTemplates(id, name, types);
+                                return method.invoke(object, args);
+                            }
+                        };
+                    }
+                });
+
+    } catch (NotFoundException e) {
+        logger.warning(e.getMessage());
+    }
+
+}
+
+public static void addTemplates(int id, String name, short[] types) {
+    templates.add(new String[] {Integer.toString(id), name, Arrays.toString(types)});
+}
+
+@Override
+public void onServerStarted() {
+     ItemTemplate[] templates1 = ItemTemplateFactory.getInstance().getTemplates();
+
+     ItemTemplate[] templates2 = Arrays.stream(templates1)
+             .filter(itemTemplate -> itemTemplate.isCooker() || isIngredient(itemTemplate) || isContainer(itemTemplate) ||
+             isActiveTarget(itemTemplate))
+             .toArray(ItemTemplate[]::new);
+
+     Arrays.stream(templates2)
+             .forEach(itemTemplate -> {
+                 String[] strings = templates.stream()
+                         .filter(stringArray -> Objects.equals(
+                                 stringArray[0], Integer.toString(itemTemplate.getTemplateId())))
+                         .findFirst()
+                         .orElse(new String[]{"", "", ""});
+                 String enumm = strings[1].replace(" ", "_").toUpperCase();
+                 String abc = String.format("%s(\"%s\", %s, buildTypes(new int[]%s)),%n", enumm, strings[1],
+                         strings[0], strings[2].replace("[", "{").replace("]", "}"));
+                 formatedLines.add(abc);
+             });
+     String zyz = formatedLines.toString();
+     int i = 0;
+ }
+
+
+ private boolean isIngredient(ItemTemplate itemTemplate) {
+     return itemTemplate.isFood() || itemTemplate.isLiquidCooking() || itemTemplate.isRecipeItem() || itemTemplate.canBeFermented();
+ }
+
+ private boolean isContainer(ItemTemplate itemTemplate) {
+     return itemTemplate.isHollow() && (itemTemplate.isFoodMaker() || itemTemplate.isRecipeItem());
+ }
+
+ private boolean isActiveTarget(ItemTemplate itemTemplate) {
+     return itemTemplate.isFood() || itemTemplate.isLiquidCooking() || itemTemplate.isCookingTool() || itemTemplate.isRecipeItem();
+ }
