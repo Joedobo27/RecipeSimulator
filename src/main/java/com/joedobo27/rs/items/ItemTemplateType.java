@@ -2,7 +2,7 @@ package com.joedobo27.rs.items;
 
 import java.util.Arrays;
 
-enum ItemTemplateType {
+public enum ItemTemplateType {
     NONE(-1),
     HOLLOW(1),
     WEAPON_SLASH(2),
@@ -245,7 +245,20 @@ enum ItemTemplateType {
     PAVEABLE(242),
     CAVE_PAVEABLE(243),
     DECORATION_WHEN_PLANTED(244),
-    DESC_IS_NAME(245);
+    DESC_IS_NAME(245),
+    ANY_CEREAL_FOOD_GROUP(1157),
+    ANY_VEGGIE_FOOD_GROUP(1156),
+    ANY_CHEESE_FOOD_GROUP(1198),
+    ANY_MILK_FOOD_GROUP(1200),
+    ANY_MEAT_FOOD_GROUP(1261),
+    ANY_FISH_FOOD_GROUP(1201),
+    ANY_MUSHROOM_FOOD_GROUP(1199),
+    ANY_HERB_FOOD_GROUP(1158),
+    ANY_FLOWER_FOOD_GROUP(1267),
+    ANY_BERRY_FOOD_GROUP(1179),
+    ANY_NUT_FOOD_GROUP(1197),
+    ANY_FRUIT_FOOD_GROUP(1163),
+    ANY_SPICE_FOOD_GROUP(1159);
 
     private final int typeId;
 
@@ -266,6 +279,13 @@ enum ItemTemplateType {
                 .toArray(ItemTemplateType[]::new);
     }
 
+    public boolean isAnyFoodType() {
+        return this.equals(ANY_CEREAL_FOOD_GROUP) || this.equals(ANY_VEGGIE_FOOD_GROUP) || this.equals(ANY_CHEESE_FOOD_GROUP) ||
+                this.equals(ANY_MILK_FOOD_GROUP) || this.equals(ANY_MEAT_FOOD_GROUP) || this.equals(ANY_FISH_FOOD_GROUP) ||
+                this.equals(ANY_MUSHROOM_FOOD_GROUP) || this.equals(ANY_HERB_FOOD_GROUP) || this.equals(ANY_FLOWER_FOOD_GROUP) ||
+                this.equals(ANY_BERRY_FOOD_GROUP) || this.equals(ANY_NUT_FOOD_GROUP) || this.equals(ANY_FRUIT_FOOD_GROUP) ||
+                this.equals(ANY_SPICE_FOOD_GROUP);
+    }
 }
 
 

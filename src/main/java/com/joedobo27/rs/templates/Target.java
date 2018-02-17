@@ -1,6 +1,6 @@
 package com.joedobo27.rs.templates;
 
-import com.joedobo27.rs.Constants;
+import com.joedobo27.rs.*;
 import com.joedobo27.rs.items.CookedState;
 import com.joedobo27.rs.items.ItemTemplate;
 import com.joedobo27.rs.items.Material;
@@ -8,7 +8,7 @@ import com.joedobo27.rs.items.PreparedState;
 
 import javax.json.JsonObject;
 
-public class Active implements Constants {
+public class Target implements Constants {
 
     private final ItemTemplate itemTemplate;
     /**
@@ -30,9 +30,10 @@ public class Active implements Constants {
     private final Integer difficulty;
     private final Integer loss;
     private final Integer ratio;
+    private final Creature creature;
 
-    public Active(ItemTemplate itemTemplate, CookedState cookedState, PreparedState preparedState, Material material,
-                  ItemTemplate realTemplate, Integer difficulty, Integer loss, Integer ratio) {
+    public Target(ItemTemplate itemTemplate, CookedState cookedState, PreparedState preparedState, Material material,
+                  ItemTemplate realTemplate, int difficulty, int loss, int ratio, Creature creature) {
         this.itemTemplate = itemTemplate;
         this.cookedState = cookedState;
         this.preparedState = preparedState;
@@ -41,9 +42,10 @@ public class Active implements Constants {
         this.difficulty = difficulty;
         this.loss = loss;
         this.ratio = ratio;
+        this.creature = creature;
     }
 
-    static Active buildFromJson(JsonObject jsonObject) {
+    static Target buildFromJson(JsonObject jsonObject) {
         ItemTemplate itemTemplate = ItemTemplate.NONE;
         CookedState cookedState = CookedState.RAW;
         PreparedState preparedState = PreparedState.NONE;
@@ -52,7 +54,7 @@ public class Active implements Constants {
         Integer difficulty = DIFFICULTY_NONE;
         Integer loss = LOSS_NONE;
         Integer ratio = RATIO_NONE;
-
+        Creature creature = Creature.NONE;
         if (jsonObject.containsKey("id"))
             itemTemplate = ItemTemplate.getItemTemplateFromName(jsonObject.getString("id"));
         if (jsonObject.containsKey("cstate")){
@@ -76,7 +78,8 @@ public class Active implements Constants {
         if (jsonObject.containsKey("ratio")){
             ratio = jsonObject.getInt("ratio");
         }
-        return new Active(itemTemplate, cookedState, preparedState, material, realTemplate, difficulty, loss, ratio);
-    }
 
+        return new Target(itemTemplate, cookedState, preparedState, material, realTemplate, difficulty, loss, ratio,
+                creature);
+    }
 }

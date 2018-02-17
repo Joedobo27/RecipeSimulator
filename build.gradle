@@ -17,3 +17,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.glassfish/javax.json
     compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
 }
+
+jar {
+    into 'resources', {
+        from 'resources'
+    }
+}

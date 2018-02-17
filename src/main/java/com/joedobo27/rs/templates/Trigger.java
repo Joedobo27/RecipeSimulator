@@ -1,4 +1,4 @@
-package com.joedobo27.rs;
+package com.joedobo27.rs.templates;
 
 public enum Trigger {
     NONE,

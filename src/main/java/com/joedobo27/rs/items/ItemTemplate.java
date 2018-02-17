@@ -1,53 +1,57 @@
 package com.joedobo27.rs.items;
 
+import com.joedobo27.rs.Constants;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.joedobo27.rs.items.ItemTemplateType.*;
 
-public enum ItemTemplate {
+public enum ItemTemplate implements Constants{
     NONE("none", -1, new ItemTemplateType[]{ItemTemplateType.NONE}),
-    GREEN_APPLE("green apple", 6, new ItemTemplateType[] {FOOD, BULK, FRUIT, NOT_MISSION, LOWNUTRITION}),
+    GREEN_APPLE("green apple", 6, new ItemTemplateType[] {FOOD, BULK, FRUIT, NOT_MISSION, LOWNUTRITION, ANY_FRUIT_FOOD_GROUP}),
     HAND("hand", 14, buildTypes(new int[]{28, 8, 1, 48, 210})),
     SHAFT("shaft", 23, buildTypes(new int[]{133, 146, 21, 14, 144, 37, 84, 129, 158, 165})),
-    BARLEY("barley", 28, buildTypes(new int[]{146, 103, 20, 5, 55, 129})),
-    WHEAT("wheat", 29, buildTypes(new int[]{146, 102, 20, 5, 55, 129})),
-    RYE("rye", 30, buildTypes(new int[]{20, 146, 5, 55, 129})),
-    OAT("oat", 31, buildTypes(new int[]{20, 146, 5, 55, 129})),
-    CORN("corn", 32, buildTypes(new int[]{146, 102, 20, 5, 55, 129, 217, 29, 212, 223})),
-    PUMPKIN("pumpkin", 33, buildTypes(new int[]{146, 102, 5, 55, 129, 212, 29, 223})),
+    BARLEY("barley", 28, buildTypes(new int[]{146, 103, 20, 5, 55, 129, 1157})),
+    WHEAT("wheat", 29, buildTypes(new int[]{146, 102, 20, 5, 55, 129, 1157})),
+    RYE("rye", 30, buildTypes(new int[]{20, 146, 5, 55, 129, 1157})),
+    OAT("oat", 31, buildTypes(new int[]{20, 146, 5, 55, 129, 1157})),
+    CORN("corn", 32, buildTypes(new int[]{146, 102, 20, 5, 55, 129, 217, 29, 212, 223, 1156})),
+    PUMPKIN("pumpkin", 33, buildTypes(new int[]{146, 102, 5, 55, 129, 212, 29, 223, 1156})),
     PUMPKIN_SEED("pumpkin seed", 34, buildTypes(new int[]{20, 146, 5, 55, 129})),
-    POTATO("potato", 35, buildTypes(new int[]{5, 146, 20, 55, 129, 212, 29, 223})),
+    POTATO("potato", 35, buildTypes(new int[]{5, 146, 20, 55, 129, 212, 29, 223, 1156})),
     CAMPFIRE("campfire", 37, buildTypes(new int[]{52, 21, 1, 31, 59, 65, 147, 165, 49, 209})),
     CHEESE_DRILL("cheese drill", 65, buildTypes(new int[]{108, 44, 144, 38, 21, 92, 147, 51, 210})),
-    CHEESE("cheese", 66, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74})),
-    GOAT_CHEESE("goat cheese", 67, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 157, 212, 220, 224, 74})),
-    FETA_CHEESE("feta cheese", 68, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74})),
-    BUFFALO_CHEESE("buffalo cheese", 69, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74})),
+    CHEESE("cheese", 66, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74, 1198})),
+    GOAT_CHEESE("goat cheese", 67, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 157, 212, 220, 224, 74, 1198})),
+    FETA_CHEESE("feta cheese", 68, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74, 1198})),
+    BUFFALO_CHEESE("buffalo cheese", 69, buildTypes(new int[]{27, 5, 88, 146, 108, 192, 212, 220, 224, 74, 1198})),
     HONEY("honey", 70, buildTypes(new int[]{26, 5, 55, 88})),
     LYE("lye", 73, buildTypes(new int[]{26, 211})),
     FRYING_PAN("frying pan", 75, buildTypes(new int[]{108, 147, 44, 38, 22, 18, 77, 1})),
     POTTERY_JAR("pottery jar", 76, buildTypes(new int[]{108, 30, 1, 33, 92, 215, 48, 211, 77})),
     POTTERY_BOWL("pottery bowl", 77, buildTypes(new int[]{108, 30, 1, 77, 92, 97, 33})),
-    MEAT("meat", 92, buildTypes(new int[]{28, 5, 62, 74, 219, 129, 146, 212, 223})),
+    MEAT("meat", 92, buildTypes(new int[]{28, 5, 62, 74, 219, 129, 146, 212, 223, 1261})),
     BUTCHERING_KNIFE("butchering knife", 93, buildTypes(new int[]{108, 44, 38, 22, 17, 210, 13, 147})),
     HANDLE("handle", 99, buildTypes(new int[]{21, 146, 113, 211})),
     WATER("water", 128, buildTypes(new int[]{26, 88, 90, 113})),
-    COOKED_MEAT("cooked meat", 129, buildTypes(new int[]{28, 146, 5, 212, 74, 219, 157})),
+    COOKED_MEAT("cooked meat", 129, buildTypes(new int[]{28, 146, 5, 212, 74, 219, 157, 1261})),
     CANDLE("candle", 133, buildTypes(new int[]{27, 32, 59, 115, 52, 210})),
-    HAZELNUTS("hazelnuts", 134, buildTypes(new int[]{5, 21, 146, 80, 217, 74, 212})),
+    HAZELNUTS("hazelnuts", 134, buildTypes(new int[]{5, 21, 146, 80, 217, 74, 212, 1197})),
     FAT("fat", 140, buildTypes(new int[]{146, 46, 211})),
-    MILK("milk", 142, buildTypes(new int[]{26, 88, 90, 113, 191, 212})),
+    MILK("milk", 142, buildTypes(new int[]{26, 88, 90, 113, 191, 212, 1200})),
     COTTON_SEED("cotton seed", 145, buildTypes(new int[]{20, 146, 113, 211, 217})),
-    PIKE("pike", 157, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    SMALLMOUTH_BASS("smallmouth bass", 158, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    HERRING("herring", 159, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    CATFISH("catfish", 160, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    SNOOK("snook", 161, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    ROACH("roach", 162, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    PERCH("perch", 163, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    CARP("carp", 164, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    BROOK_TROUT("brook trout", 165, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
+    PIKE("pike", 157, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    SMALLMOUTH_BASS("smallmouth bass", 158, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    HERRING("herring", 159, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    CATFISH("catfish", 160, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    SNOOK("snook", 161, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    ROACH("roach", 162, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    PERCH("perch", 163, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    CARP("carp", 164, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    BROOK_TROUT("brook trout", 165, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
     WOOD_SCRAP("wood scrap", 169, buildTypes(new int[]{21, 146, 46, 113, 129, 157, 174, 211})),
     LEATHER_PIECES("leather pieces", 172, buildTypes(new int[]{23, 146, 46, 113, 129, 174, 157, 211})),
     PIG_FOOD("pig food", 173, buildTypes(new int[]{5, 146, 46, 55, 113, 129, 157, 174})),
@@ -57,12 +61,12 @@ public enum ItemTemplate {
     FLOUR("flour", 201, buildTypes(new int[]{5, 146, 74, 108})),
     GRINDSTONE("grindstone", 202, buildTypes(new int[]{25, 210, 44})),
     BREAD("bread", 203, buildTypes(new int[]{82, 74, 212, 222, 233, 146})),
-    GREEN_MUSHROOM("green mushroom", 246, buildTypes(new int[]{105, 147, 5, 146, 55, 212, 226})),
-    BLACK_MUSHROOM("black mushroom", 247, buildTypes(new int[]{106, 147, 5, 146, 55, 212, 226})),
-    BROWN_MUSHROOM("brown mushroom", 248, buildTypes(new int[]{103, 147, 5, 146, 55, 212, 226})),
-    YELLOW_MUSHROOM("yellow mushroom", 249, buildTypes(new int[]{104, 147, 5, 146, 55, 212, 226})),
-    BLUE_MUSHROOM("blue mushroom", 250, buildTypes(new int[]{104, 147, 5, 146, 55, 212, 226})),
-    RED_MUSHROOM("red mushroom", 251, buildTypes(new int[]{5, 146, 147, 79, 55, 212, 226})),
+    GREEN_MUSHROOM("green mushroom", 246, buildTypes(new int[]{105, 147, 5, 146, 55, 212, 226, 1199})),
+    BLACK_MUSHROOM("black mushroom", 247, buildTypes(new int[]{106, 147, 5, 146, 55, 212, 226, 1199})),
+    BROWN_MUSHROOM("brown mushroom", 248, buildTypes(new int[]{103, 147, 5, 146, 55, 212, 226, 1199})),
+    YELLOW_MUSHROOM("yellow mushroom", 249, buildTypes(new int[]{104, 147, 5, 146, 55, 212, 226, 1199})),
+    BLUE_MUSHROOM("blue mushroom", 250, buildTypes(new int[]{104, 147, 5, 146, 55, 212, 226, 1199})),
+    RED_MUSHROOM("red mushroom", 251, buildTypes(new int[]{5, 146, 147, 79, 55, 212, 226, 1199})),
     SPOON("spoon", 257, buildTypes(new int[]{108, 22, 147, 44, 210, 87})),
     KNIFE("knife", 258, buildTypes(new int[]{108, 22, 147, 44, 210, 87})),
     FORK("fork", 259, buildTypes(new int[]{108, 22, 147, 44, 210, 87})),
@@ -85,38 +89,38 @@ public enum ItemTemplate {
     SAUCE_PAN("sauce pan", 350, buildTypes(new int[]{108, 44, 22, 18, 77, 1, 147, 33})),
     CAULDRON("cauldron", 351, buildTypes(new int[]{108, 147, 44, 22, 77, 1, 33})),
     SOUP("soup", 352, buildTypes(new int[]{5, 219, 55, 26, 90, 233, 108})),
-    LOVAGE("lovage", 353, buildTypes(new int[]{146, 105, 5, 78, 55, 212, 206, 221})),
-    SAGE("sage", 354, buildTypes(new int[]{146, 104, 5, 55, 78, 212, 206, 221})),
-    ONION("onion", 355, buildTypes(new int[]{146, 102, 5, 55, 29, 212, 20, 223})),
-    GARLIC("garlic", 356, buildTypes(new int[]{146, 103, 5, 29, 20, 212, 55, 223})),
-    OREGANO("oregano", 357, buildTypes(new int[]{5, 146, 78, 212, 55, 206, 221})),
-    PARSLEY("parsley", 358, buildTypes(new int[]{146, 102, 5, 55, 78, 212, 206, 221})),
-    BASIL("basil", 359, buildTypes(new int[]{5, 146, 55, 78, 212, 206, 221})),
-    THYME("thyme", 360, buildTypes(new int[]{5, 146, 78, 55, 212, 206, 221})),
-    BELLADONNA("belladonna", 361, buildTypes(new int[]{5, 146, 79, 78, 55, 212, 206, 221})),
-    STRAWBERRIES("strawberries", 362, buildTypes(new int[]{5, 146, 80, 46, 55, 212})),
-    ROSEMARY("rosemary", 363, buildTypes(new int[]{146, 105, 5, 78, 55, 212, 206, 221})),
-    BLUEBERRY("blueberry", 364, buildTypes(new int[]{5, 146, 80, 46, 55, 212})),
-    NETTLES("nettles", 365, buildTypes(new int[]{146, 104, 5, 78, 55, 212})),
-    SASSAFRAS("sassafras", 366, buildTypes(new int[]{146, 103, 5, 78, 55, 212})),
-    LINGONBERRY("lingonberry", 367, buildTypes(new int[]{5, 146, 80, 46, 55, 212})),
-    MEAT_FILLET("meat fillet", 368, buildTypes(new int[]{28, 5, 62, 174, 219, 108, 74, 212, 146, 223})),
+    LOVAGE("lovage", 353, buildTypes(new int[]{146, 105, 5, 78, 55, 212, 206, 221, 1158})),
+    SAGE("sage", 354, buildTypes(new int[]{146, 104, 5, 55, 78, 212, 206, 221, 1158})),
+    ONION("onion", 355, buildTypes(new int[]{146, 102, 5, 55, 29, 212, 20, 223, 1156})),
+    GARLIC("garlic", 356, buildTypes(new int[]{146, 103, 5, 29, 20, 212, 55, 223, 1156})),
+    OREGANO("oregano", 357, buildTypes(new int[]{5, 146, 78, 212, 55, 206, 221, 1158})),
+    PARSLEY("parsley", 358, buildTypes(new int[]{146, 102, 5, 55, 78, 212, 206, 221, 1158})),
+    BASIL("basil", 359, buildTypes(new int[]{5, 146, 55, 78, 212, 206, 221, 1158})),
+    THYME("thyme", 360, buildTypes(new int[]{5, 146, 78, 55, 212, 206, 221, 1158})),
+    BELLADONNA("belladonna", 361, buildTypes(new int[]{5, 146, 79, 78, 55, 212, 206, 221, 1158})),
+    STRAWBERRIES("strawberries", 362, buildTypes(new int[]{5, 146, 80, 46, 55, 212, 1179})),
+    ROSEMARY("rosemary", 363, buildTypes(new int[]{146, 105, 5, 78, 55, 212, 206, 221, 1158})),
+    BLUEBERRY("blueberry", 364, buildTypes(new int[]{5, 146, 80, 46, 55, 212, 1179})),
+    NETTLES("nettles", 365, buildTypes(new int[]{146, 104, 5, 78, 55, 212, 1158})),
+    SASSAFRAS("sassafras", 366, buildTypes(new int[]{146, 103, 5, 78, 55, 212, 1158})),
+    LINGONBERRY("lingonberry", 367, buildTypes(new int[]{5, 146, 80, 46, 55, 212, 1179})),
+    MEAT_FILLET("meat fillet", 368, buildTypes(new int[]{28, 5, 62, 174, 219, 108, 74, 212, 146, 223, 1261})),
     FISH_FILLET("fish fillet", 369, buildTypes(new int[]{5, 62, 36, 75, 219, 108, 174, 212, 146, 223, 233})),
     PORRIDGE("porridge", 373, buildTypes(new int[]{5, 219, 26, 74, 108})),
-    CHERRIES("cherries", 409, buildTypes(new int[]{5, 146, 80, 46, 157, 55})),
-    LEMON("lemon", 410, buildTypes(new int[]{146, 103, 5, 80, 157, 55})),
-    BLUE_GRAPES("blue grapes", 411, buildTypes(new int[]{5, 146, 80, 46, 157, 55})),
-    OLIVES("olives", 412, buildTypes(new int[]{5, 146, 46, 157, 55})),
+    CHERRIES("cherries", 409, buildTypes(new int[]{5, 146, 80, 46, 157, 55, 1163})),
+    LEMON("lemon", 410, buildTypes(new int[]{146, 103, 5, 80, 157, 55, 1163})),
+    BLUE_GRAPES("blue grapes", 411, buildTypes(new int[]{5, 146, 80, 46, 157, 55, 1163})),
+    OLIVES("olives", 412, buildTypes(new int[]{5, 146, 46, 157, 55, 1163})),
     FRUIT_PRESS("fruit press", 413, buildTypes(new int[]{108, 44, 144, 38, 21, 139, 33, 1, 147, 210})),
-    GREEN_GRAPES("green grapes", 414, buildTypes(new int[]{5, 146, 80, 46, 157, 55})),
+    GREEN_GRAPES("green grapes", 414, buildTypes(new int[]{5, 146, 80, 46, 157, 55, 1163})),
     MAPLE_SYRUP("maple syrup", 415, buildTypes(new int[]{26, 88, 90})),
     MAPLE_SAP("maple sap", 416, buildTypes(new int[]{26, 211})),
     FRUIT_JUICE("fruit juice", 417, buildTypes(new int[]{26, 88, 90, 216, 233})),
-    OLIVE_OIL("olive oil", 418, buildTypes(new int[]{108, 26, 88, 34, 158, 113})),
+    OLIVE_OIL("olive oil", 418, buildTypes(new int[]{108, 26, 88, 34, 158, 113, 1163})),
     RED_WINE("red wine", 419, buildTypes(new int[]{108, 26, 88, 89, 90, 213, 212})),
     WHITE_WINE("white wine", 420, buildTypes(new int[]{108, 26, 88, 89, 90, 213, 212})),
     CAMELLIA("camellia", 422, buildTypes(new int[]{146, 104, 211, 55, 78, 113, 157, 212})),
-    OLEANDER("oleander", 423, buildTypes(new int[]{5, 146, 78, 79, 55, 113, 157, 212})),
+    OLEANDER("oleander", 423, buildTypes(new int[]{5, 146, 78, 79, 55, 113, 157, 212, 1158})),
     LAVENDER_FLOWER("lavender flower", 424, buildTypes(new int[]{146, 103, 113, 157, 212, 211})),
     TEA("tea", 425, buildTypes(new int[]{26, 88, 90, 233})),
     ROSE_FLOWER("rose flower", 426, buildTypes(new int[]{146, 102, 113, 157, 211, 212, 233})),
@@ -126,20 +130,20 @@ public enum ItemTemplate {
     EGG("egg", 464, buildTypes(new int[]{5, 48, 96, 113, 219, 212, 146, 74})),
     HUGE_EGG("huge egg", 465, buildTypes(new int[]{112, 5, 48, 96, 59, 219})),
     SANDWICH("sandwich", 488, buildTypes(new int[]{82, 212, 75, 220, 222, 233})),
-    BOUQUET_OF_YELLOW_FLOWERS("bouquet of yellow flowers", 498, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_ORANGE_RED_FLOWERS("bouquet of orange-red flowers", 499, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_PURPLE_FLOWERS("bouquet of purple flowers", 500, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_WHITE_FLOWERS("bouquet of white flowers", 501, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_BLUE_FLOWERS("bouquet of blue flowers", 502, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_GREENISH_YELLOW_FLOWERS("bouquet of greenish-yellow flowers", 503, buildTypes(new int[]{118, 146, 211})),
-    BOUQUET_OF_WHITE_DOTTED_FLOWERS("bouquet of white-dotted flowers", 504, buildTypes(new int[]{118, 146, 211, 157})),
-    MARLIN("marlin", 569, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    BLUE_SHARK("blue shark", 570, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    WHITE_SHARK("white shark", 571, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    OCTOPUS("octopus", 572, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    SAILFISH("sailfish", 573, buildTypes(new int[]{5, 36, 146, 74, 212, 219, 223})),
-    DORADO("dorado", 574, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223})),
-    TUNA("tuna", 575, buildTypes(new int[]{5, 36, 146, 212, 76, 219, 223})),
+    BOUQUET_OF_YELLOW_FLOWERS("bouquet of yellow flowers", 498, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_ORANGE_RED_FLOWERS("bouquet of orange-red flowers", 499, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_PURPLE_FLOWERS("bouquet of purple flowers", 500, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_WHITE_FLOWERS("bouquet of white flowers", 501, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_BLUE_FLOWERS("bouquet of blue flowers", 502, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_GREENISH_YELLOW_FLOWERS("bouquet of greenish-yellow flowers", 503, buildTypes(new int[]{118, 146, 211, 1267})),
+    BOUQUET_OF_WHITE_DOTTED_FLOWERS("bouquet of white-dotted flowers", 504, buildTypes(new int[]{118, 146, 211, 157, 1267})),
+    MARLIN("marlin", 569, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    BLUE_SHARK("blue shark", 570, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    WHITE_SHARK("white shark", 571, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    OCTOPUS("octopus", 572, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    SAILFISH("sailfish", 573, buildTypes(new int[]{5, 36, 146, 74, 212, 219, 223, 1201})),
+    DORADO("dorado", 574, buildTypes(new int[]{5, 36, 146, 212, 75, 219, 223, 1201})),
+    TUNA("tuna", 575, buildTypes(new int[]{5, 36, 146, 212, 76, 219, 223, 1201})),
     DISHWATER("dishwater", 634, buildTypes(new int[]{5, 137, 26, 90})),
     HEART("heart", 636, buildTypes(new int[]{28, 5, 62, 74, 48, 106, 129, 46, 146})),
     SLEEP_POWDER("sleep powder", 666, buildTypes(new int[]{43, 42, 5, 53, 76, 127})),
@@ -157,37 +161,37 @@ public enum ItemTemplate {
     SOURCE("source", 763, buildTypes(new int[]{26, 88, 90, 163})),
     SOURCE_SALT("source salt", 764, buildTypes(new int[]{5, 55, 146, 163, 46})),
     WINE_BARREL("wine barrel", 768, buildTypes(new int[]{108, 135, 51, 1, 21, 33, 86, 52, 147, 44, 92, 77, 67, 178, 199, 236})),
-    WALNUT("walnut", 832, buildTypes(new int[]{5, 21, 146, 80, 212, 217, 74})),
-    CHESTNUT("chestnut", 833, buildTypes(new int[]{5, 21, 146, 80, 212, 74})),
+    WALNUT("walnut", 832, buildTypes(new int[]{5, 21, 146, 80, 212, 217, 74, 1197})),
+    CHESTNUT("chestnut", 833, buildTypes(new int[]{5, 21, 146, 80, 212, 74, 1197})),
     RICE_PORRIDGE("rice porridge", 856, buildTypes(new int[]{82, 74, 26, 219})),
     RISOTTO("risotto", 857, buildTypes(new int[]{82, 76, 219, 222})),
     RICE_WINE("rice wine", 858, buildTypes(new int[]{108, 26, 88, 90, 213, 212})),
-    CRAB_MEAT("crab meat", 900, buildTypes(new int[]{28, 5, 62, 129, 146, 76, 219, 212, 223})),
-    SHEEP_MILK("sheep milk", 1012, buildTypes(new int[]{26, 88, 90, 113, 191, 212})),
-    BISON_MILK("bison milk", 1013, buildTypes(new int[]{26, 88, 90, 113, 191, 212})),
+    CRAB_MEAT("crab meat", 900, buildTypes(new int[]{28, 5, 62, 129, 146, 76, 219, 212, 223, 1261})),
+    SHEEP_MILK("sheep milk", 1012, buildTypes(new int[]{26, 88, 90, 113, 191, 212, 1200})),
+    BISON_MILK("bison milk", 1013, buildTypes(new int[]{26, 88, 90, 113, 191, 212, 1200})),
     RIFT_WOOD("rift wood", 1104, buildTypes(new int[]{21, 146, 46, 112, 211, 129, 48, 157})),
-    MINT("mint", 1130, buildTypes(new int[]{146, 5, 78, 103, 206, 55, 212, 221})),
-    FENNEL("fennel", 1131, buildTypes(new int[]{146, 5, 78, 103, 55, 212, 217})),
+    MINT("mint", 1130, buildTypes(new int[]{146, 5, 78, 103, 206, 55, 212, 221, 1158})),
+    FENNEL("fennel", 1131, buildTypes(new int[]{146, 5, 78, 103, 55, 212, 217, 1158})),
     FENNEL_PLANT("fennel plant", 1132, buildTypes(new int[]{146, 5, 78, 212, 221})),
-    CARROT("carrot", 1133, buildTypes(new int[]{146, 5, 55, 29, 212, 223})),
-    CABBAGE("cabbage", 1134, buildTypes(new int[]{146, 5, 55, 29, 212, 223})),
-    TOMATO("tomato", 1135, buildTypes(new int[]{146, 5, 55, 29, 212, 223})),
+    CARROT("carrot", 1133, buildTypes(new int[]{146, 5, 55, 29, 212, 223, 1156})),
+    CABBAGE("cabbage", 1134, buildTypes(new int[]{146, 5, 55, 29, 212, 223, 1156})),
+    TOMATO("tomato", 1135, buildTypes(new int[]{146, 5, 55, 29, 212, 223, 1156})),
     SUGAR_BEET("sugar beet", 1136, buildTypes(new int[]{146, 5, 55, 212})),
-    LETTUCE("lettuce", 1137, buildTypes(new int[]{146, 5, 55, 29, 212, 223})),
-    PEA_POD("pea pod", 1138, buildTypes(new int[]{146, 5, 55, 29, 212, 223})),
+    LETTUCE("lettuce", 1137, buildTypes(new int[]{146, 5, 55, 29, 212, 223, 1156})),
+    PEA_POD("pea pod", 1138, buildTypes(new int[]{146, 5, 55, 29, 212, 223, 1156})),
     SUGAR("sugar", 1139, buildTypes(new int[]{146, 137, 5})),
-    CUMIN("cumin", 1140, buildTypes(new int[]{206, 55, 146, 5, 205, 212, 221})),
-    GINGER("ginger", 1141, buildTypes(new int[]{206, 55, 146, 5, 205, 212, 221})),
-    NUTMEG("nutmeg", 1142, buildTypes(new int[]{146, 55, 5, 205, 105, 212, 217})),
-    PAPRIKA("paprika", 1143, buildTypes(new int[]{146, 55, 5, 205, 102, 212, 221})),
-    TURMERIC("turmeric", 1144, buildTypes(new int[]{146, 55, 5, 205, 103, 212, 221})),
+    CUMIN("cumin", 1140, buildTypes(new int[]{206, 55, 146, 5, 205, 212, 221, 1159})),
+    GINGER("ginger", 1141, buildTypes(new int[]{206, 55, 146, 5, 205, 212, 221, 1159})),
+    NUTMEG("nutmeg", 1142, buildTypes(new int[]{146, 55, 5, 205, 105, 212, 217, 1159})),
+    PAPRIKA("paprika", 1143, buildTypes(new int[]{146, 55, 5, 205, 102, 212, 221, 1159})),
+    TURMERIC("turmeric", 1144, buildTypes(new int[]{146, 55, 5, 205, 103, 212, 221, 1159})),
     CARROT_SEED("carrot seed", 1145, buildTypes(new int[]{20, 55, 146, 5})),
     CABBAGE_SEED("cabbage seed", 1146, buildTypes(new int[]{20, 55, 146, 5})),
     TOMATO_SEED("tomato seed", 1147, buildTypes(new int[]{20, 55, 146, 5})),
     SUGAR_BEET_SEED("sugar beet seed", 1148, buildTypes(new int[]{20, 55, 146, 5})),
     LETTUCE_SEED("lettuce seed", 1149, buildTypes(new int[]{20, 55, 146, 5})),
-    PEA("pea", 1150, buildTypes(new int[]{20, 55, 146, 5, 29, 212, 223})),
-    FENNEL_SEED("fennel seed", 1151, buildTypes(new int[]{206, 55, 146, 5, 205, 212})),
+    PEA("pea", 1150, buildTypes(new int[]{20, 55, 146, 5, 29, 212, 223, 1156})),
+    FENNEL_SEED("fennel seed", 1151, buildTypes(new int[]{206, 55, 146, 5, 205, 212, 1159})),
     COCOA("cocoa", 1152, buildTypes(new int[]{5, 129, 212, 55})),
     PAPRIKA_SEED("paprika seed", 1153, buildTypes(new int[]{206, 55, 146, 5, 205, 212})),
     TURMERIC_SEED("turmeric seed", 1154, buildTypes(new int[]{206, 55, 146, 5, 205, 212})),
@@ -212,7 +216,7 @@ public enum ItemTemplate {
     CIDER("cider", 1181, buildTypes(new int[]{108, 26, 88, 90, 212, 213})),
     BEER("beer", 1182, buildTypes(new int[]{108, 26, 88, 90, 212, 213, 233})),
     WHISKY("whisky", 1183, buildTypes(new int[]{108, 26, 88, 90, 213, 212, 214, 89, 233})),
-    PINENUT("pinenut", 1184, buildTypes(new int[]{5, 55, 146, 80, 212, 217})),
+    PINENUT("pinenut", 1184, buildTypes(new int[]{5, 55, 146, 80, 212, 217, 1197})),
     CHOCOLATE("chocolate", 1185, buildTypes(new int[]{82, 75, 146, 220, 222})),
     BUTTER("butter", 1186, buildTypes(new int[]{82, 55, 222, 233})),
     OMELETTE("omelette", 1187, buildTypes(new int[]{82, 76, 219, 222, 233})),
@@ -224,7 +228,7 @@ public enum ItemTemplate {
     COOKING_OIL("cooking oil", 1193, buildTypes(new int[]{26, 88, 34, 158, 113, 233})),
     GRAVY("gravy", 1194, buildTypes(new int[]{26, 88, 74, 219})),
     CUSTARD("custard", 1195, buildTypes(new int[]{5, 26, 88, 74, 108})),
-    RASPBERRIES("raspberries", 1196, buildTypes(new int[]{5, 146, 80, 46, 212, 55})),
+    RASPBERRIES("raspberries", 1196, buildTypes(new int[]{5, 146, 80, 46, 212, 55, 1179})),
     ANY_NUT("any nut", 1197, buildTypes(new int[]{207, 208, 5})),
     ANY_CHEESE("any cheese", 1198, buildTypes(new int[]{207, 208, 5, 192, 224})),
     ANY_MUSHROOM("any mushroom", 1199, buildTypes(new int[]{207, 208, 5, 226})),
@@ -273,7 +277,7 @@ public enum ItemTemplate {
     BREADCRUMBS("breadcrumbs", 1244, buildTypes(new int[]{82, 146, 212, 74, 222})),
     MEATBALLS("meatballs", 1245, buildTypes(new int[]{82, 146, 212, 74, 219, 222, 233})),
     VINEGAR("vinegar", 1246, buildTypes(new int[]{108, 26, 88, 212, 233})),
-    CUCUMBER("cucumber", 1247, buildTypes(new int[]{146, 55, 5, 29, 212, 223})),
+    CUCUMBER("cucumber", 1247, buildTypes(new int[]{146, 55, 5, 29, 212, 223, 1156})),
     CUCUMBER_SEED("cucumber seed", 1248, buildTypes(new int[]{20, 55, 146, 5})),
     CREAM("cream", 1249, buildTypes(new int[]{212, 26, 88, 233})),
     GOBLIN_SKULL("goblin skull", 1250, buildTypes(new int[]{62, 187, 211})),
@@ -282,7 +286,7 @@ public enum ItemTemplate {
     TART("tart", 1258, buildTypes(new int[]{82, 129, 76, 219, 220, 222, 233})),
     STIR_FRY("stir fry", 1259, buildTypes(new int[]{82, 129, 212, 76, 219, 222, 233})),
     NORI("nori", 1260, buildTypes(new int[]{146, 46, 113, 5, 55})),
-    ANY_MEAT("any meat", 1261, buildTypes(new int[]{207, 208, 5, 28, 223})),
+    ANY_MEAT("any meat", 1261, buildTypes(new int[]{207, 208, 5, 28, 223, 1261})),
     PIZZA("pizza", 1262, buildTypes(new int[]{82, 129, 212, 76, 219, 222})),
     ANY_OIL("any oil", 1263, buildTypes(new int[]{108, 26, 88, 34, 158, 113, 208})),
     SUSHI("sushi", 1264, buildTypes(new int[]{82, 129, 212, 76, 220, 222, 233})),
@@ -297,7 +301,7 @@ public enum ItemTemplate {
     COCONUT("coconut", 1280, buildTypes(new int[]{146, 5, 80, 212, 55})),
     ICE_CREAM("ice cream", 1281, buildTypes(new int[]{5, 55, 220, 27, 108, 233})),
     SWEET("sweet", 1282, buildTypes(new int[]{82, 74, 108, 212, 233, 220, 234})),
-    ORANGE("orange", 1283, buildTypes(new int[]{146, 104, 5, 80, 212, 157, 74})),
+    ORANGE("orange", 1283, buildTypes(new int[]{146, 104, 5, 80, 212, 157, 74, 1179})),
     BOILER("boiler", 1284, buildTypes(new int[]{22, 1, 31, 54, 232, 240, 178, 33, 77, 229, 112, 157})),
     RUM("rum", 1286, buildTypes(new int[]{108, 26, 88, 90, 213, 212, 214, 89})),
     MUFFIN("muffin", 1287, buildTypes(new int[]{82, 129, 212, 76, 219, 222, 233})),
@@ -359,6 +363,62 @@ public enum ItemTemplate {
 
     public int getTemplateId() {
         return templateId;
+    }
+
+    public boolean isAnyMeatGroup(){
+        return Arrays.stream(this.types)
+                .anyMatch(itemTemplateType -> itemTemplateType.equals(ANY_MEAT_FOOD_GROUP));
+    }
+
+    public ItemTemplateType[] getTypes() {
+        return types;
+    }
+
+    public boolean isCompatibleMaterial(Material material) {
+
+        ItemTemplateType itemTemplateType = Arrays.stream(this.types)
+                .filter(ANY_TEMPLATE_TYPES::contains)
+                .findFirst()
+                .orElse(ItemTemplateType.NONE);
+        switch (itemTemplateType) {
+            case NONE:
+                return false;
+            case ANY_MEAT_FOOD_GROUP:
+                return MEAT_TYPES.contains(material);
+            default:
+                return false;
+        }
+    }
+
+    public ArrayList<ItemTemplate> getCompatibleAnyTemplates() {
+        return Arrays.stream(values())
+                .filter(itemTemplate -> Arrays.stream(itemTemplate.types)
+                        .anyMatch(itemTemplateType1 -> itemTemplateType1.equals(this.getTypeFromTemplate())))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private ItemTemplateType getTypeFromTemplate(){
+        ItemTemplateType itemTemplateType = ItemTemplateType.NONE;
+        switch (this){
+            case ANY_MEAT:
+                itemTemplateType = ANY_MEAT_FOOD_GROUP;
+                break;
+            case ANY_VEG:
+                itemTemplateType = ANY_VEGGIE_FOOD_GROUP;
+                break;
+            case ANY_HERB:
+                itemTemplateType = ANY_HERB_FOOD_GROUP;
+                break;
+            case ANY_SPICE:
+                itemTemplateType = ANY_SPICE_FOOD_GROUP;
+                break;
+        }
+        return itemTemplateType;
+    }
+
+    public boolean isAnyFoodGrouping(){
+       return Arrays.stream(this.types)
+                .anyMatch(ItemTemplateType::isAnyFoodType);
     }
 }
 

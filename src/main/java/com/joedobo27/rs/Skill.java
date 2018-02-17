@@ -148,7 +148,7 @@ public enum Skill {
         return this.name().toLowerCase().replace("_", " ").replace("0", "-");
     }
 
-    static Skill getSkillFromString(String string) {
+    public static Skill getSkillFromName(String string) {
         return Arrays.stream(values())
                 .filter(skill -> Objects.equals(skill.getName(), string))
                 .findFirst()

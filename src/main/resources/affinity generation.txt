@@ -1,0 +1,81 @@
+AffinitiesTimed.getTimedAffinitySkill()
+
+creature.hasFlag(53) when true means toon is using new affinity system.
+
+Item.calculateAndSaveNutrition()
+    1. if (source != null && recipe.hasActiveItem() && recipe.getActiveItem().getTemplateId() != ItemList.bodyHand) {
+           ibonus += source.getTemplateId();
+           if (!Server.getInstance().isPS()) {
+               ibonus += source.getRarity();
+           }
+       }
+    2. if (recipe.hasCooker()) {
+           final Item cooker = target.getTopParentOrNull();
+           if (cooker != null) {
+               ibonus += cooker.getTemplateId();
+               if (!Server.getInstance().isPS()) {
+                   ibonus += cooker.getRarity();
+               }
+           }
+       }
+    3. ibonus += target.getTemplateId();
+
+    4. if (target.isFoodMaker()) {
+           for (final Item item4 : target.getItemsAsArray()) {
+               ibonus += item4.getTemplateId();
+               if (item4.usesFoodState()) {
+                   ibonus += item4.getAuxData();
+               }
+               ibonus += item4.getMaterial();
+               ibonus += item4.getRealTemplateId();
+               if (!Server.getInstance().isPS()) {
+                   ibonus += item4.getRarity();
+               }
+           }
+       }
+       else {
+           if (target.usesFoodState()) {
+               ibonus += target.getAuxData();
+           }
+           ibonus += target.getMaterial();
+           ibonus += target.getRealTemplateId();
+           if (this.getTemplateId() == 272) {
+               ibonus += target.getData1();
+           }
+           if (!Server.getInstance().isPS()) {
+               ibonus += target.getRarity();
+           }
+       }
+
+    5. lastly, final byte bonus = (byte)(ibonus % SkillSystem.getNumberOfSkillTemplates());
+
+    6. for all item.getAuxData(), only one state exists at a time. Although, the more times something is process the higher the stage count and
+        ingredient count will be.
+
+Item.getBonus():  return itemMealData.getBonus() & 0xFF;
+AffinitiesTimed.getTimedAffinitySkill():
+    1. fetch bonus value from above.
+    2. Get a character unique value and add it to bonus.
+    3. modulo the cumulative bonus value by the number of skills.
+
+****1****
+Zelos Malum (https://math.stackexchange.com/users/197853/zelos-malum), How to calculate a Modulo?, URL (version: 2015-05-16): https://math.stackexchange.com/q/1285058
+There are ways to calculate it, modulo is remainder counting basically.
+7=2mod5
+7=2mod5
+because 7=5∗1+27=5∗1+2
+12=2mod5
+12=2mod5
+because 12=5∗2+212=5∗2+2 and so on, so if you want to calculate for example 73=amod773=amod7 you can do this,
+that is want to get aa, take 73 and continue subtracting 7 until you no longer can. 73−7=6673−7=66, 66−7=5966−7=59 etc
+until we get 10−7=310−7=3 which gives us that a=3a=3 in it's simplest form (any of the results along the way can technically be a).
+
+As for what 1/17=113mod1201/17=113mod120 the question is simply what times 17 gives remainder 1
+when divided by 120? 113⋅17=1921=120⋅16+1
+
+****2****
+https://betterexplained.com/articles/fun-with-modular-arithmetic/
+
+****3****
+Algorithm to get all the combinations of size n from an array (Java)? [closed]
+https://stackoverflow.com/q/29910312/2298316
