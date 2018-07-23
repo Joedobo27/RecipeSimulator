@@ -11,6 +11,14 @@ public class RecipeFactory implements Constants{
 
 
     /**
+     * get active item from template and multiply by 4 for rarity. This is a choose one.
+     */
+    private final ArrayList<Active> actives;
+    /**
+     * get target item from template and multiply by 4 for rarity. This is a choose one.
+     */
+    private final ArrayList<Target> targets;
+    /**
      * get cookers from template and multiply by 4 for rarity. This is a choose one.
      */
     private final ArrayList<Cooker> cookers;
@@ -68,10 +76,12 @@ public class RecipeFactory implements Constants{
      * @param optional
      * @param any
      */
-    private RecipeFactory (ArrayList<Cooker> cookers, ArrayList<Container> containers, ArrayList<ArrayList<Ingredient>> mandatory,
-                   ArrayList<ArrayList<Ingredient>> zeroOrOne, ArrayList<ArrayList<Ingredient>> oneOf,
-                   ArrayList<ArrayList<Ingredient>> oneOrMore, ArrayList<ArrayList<Ingredient>> optional,
-                   ArrayList<ArrayList<Ingredient>> any) {
+    private RecipeFactory (ArrayList<Active> actives, ArrayList<Target> targets, ArrayList<Cooker> cookers, ArrayList<Container> containers,
+                           ArrayList<ArrayList<Ingredient>> mandatory, ArrayList<ArrayList<Ingredient>> zeroOrOne,
+                           ArrayList<ArrayList<Ingredient>> oneOf, ArrayList<ArrayList<Ingredient>> oneOrMore,
+                           ArrayList<ArrayList<Ingredient>> optional, ArrayList<ArrayList<Ingredient>> any) {
+        this.actives = actives;
+        this.targets = targets;
         this.cookers = cookers;
         this.containers = containers;
         this.mandatory = mandatory;
@@ -84,19 +94,19 @@ public class RecipeFactory implements Constants{
 
 
     public static void buildRecipe(RecipeTemplate recipeTemplate) {
+        ArrayList<Active> actives = selectActives(recipeTemplate);
+        actives = filterActives(actives);
+        ArrayList<Target> targets = selectTargets(recipeTemplate);
+        targets = filterTargets(targets);
         ArrayList<Cooker> cookers = selectCookers(recipeTemplate);
         cookers = filterCookers(cookers);
-
         ArrayList<Container> containers = new ArrayList<>(recipeTemplate.getContainers());
-
         ArrayList<ArrayList<Ingredient>> mandatory = new ArrayList<>();
         if (recipeTemplate.hasMandatoryGroup()) {
             mandatory = recipeTemplate.getMandatoryGroup().getIngredients().stream()
                     .map(RecipeFactory::buildMandatory)
                     .collect(Collectors.toCollection(ArrayList::new));
-
         }
-
         ArrayList<ArrayList<Ingredient>> oneOrMore = new ArrayList<>();
         if (recipeTemplate.hasOneOrMoreGroup()) {
             oneOrMore = recipeTemplate.getOneOrMoreGroups().stream()
@@ -107,32 +117,103 @@ public class RecipeFactory implements Constants{
         //RecipeFactory recipeFactory = new RecipeFactory(cookers, containers, );
     }
 
+    /**
+     * From Item.calculateAndSaveNutrition() the only fields that mix up affinity are item template ID and rarity.
+     *
+     * @param recipeTemplate
+     * @return
+     */
+    private static ArrayList<Active> selectActives(RecipeTemplate recipeTemplate) {
+
+        ArrayList<Active> actives;
+        // Get any recipe's result.itemTemplate which matches arg1's (recipeTemplate) active.itemTemplate.
+        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getImportedRecipeTemplates().stream()
+                .filter(recipeTemplate1 -> Objects.equals(recipeTemplate1.getResult().getItemTemplate(),
+                        recipeTemplate.getActive().getItemTemplate()))
+                .collect(Collectors.toCollection(ArrayList::new));
+        if (recipeTemplates.isEmpty()) {
+            // If no recipe's result matches look through items that could be an item for active. see Recipes.readIngredient()
+            actives = Arrays.stream(ItemTemplate.values())
+                    .filter(itemTemplate -> itemTemplate.isFood() || itemTemplate.isLiquidCooking() ||
+                            itemTemplate.isCookingTool() || itemTemplate.isRecipeItem())
+                    .filter(itemTemplate -> Objects.equals(itemTemplate, recipeTemplate.getActive().getItemTemplate()))
+                    .map(itemTemplate -> new Active(itemTemplate, recipeTemplate))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        else
+            actives = recipeTemplates.stream()
+                    .map(Active::new)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        if (actives.isEmpty())
+            return ACTIVES_NONE;
+
+        actives = actives.stream()
+                .flatMap(active -> Arrays.stream(Rarity.values())
+                        .filter(rarity -> !Objects.equals(rarity, Rarity.ANY) && !Objects.equals(rarity, Rarity.NONE))
+                        .map(rarity -> new Active(active, rarity)))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return actives;
+    }
+
+    private static ArrayList<Active> filterActives(ArrayList<Active> actives) {
+        return null;
+    }
+
+    private static ArrayList<Target> selectTargets(RecipeTemplate recipeTemplate) {
+
+        ArrayList<Target> targets;
+        // Get any recipe's result.itemTemplate which matches arg1's (recipeTemplate) active.itemTemplate.
+        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getImportedRecipeTemplates().stream()
+                .filter(recipeTemplate1 -> Objects.equals(recipeTemplate1.getResult().getItemTemplate(),
+                        recipeTemplate.getActive().getItemTemplate()))
+                .collect(Collectors.toCollection(ArrayList::new));
+        if (recipeTemplates.isEmpty()) {
+            // If no recipe's result matches look through items that could be an item for active. see Recipes.readIngredient()
+            targets = Arrays.stream(ItemTemplate.values())
+                    .filter(itemTemplate -> itemTemplate.isFood() || itemTemplate.isLiquidCooking() ||
+                            itemTemplate.isCookingTool() || itemTemplate.isRecipeItem())
+                    .filter(itemTemplate -> Objects.equals(itemTemplate, recipeTemplate.getTarget().getItemTemplate()))
+                    .map(itemTemplate -> new Target(itemTemplate, recipeTemplate))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        else
+            targets = recipeTemplates.stream()
+                    .map(Target::new)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        if (targets.isEmpty())
+            return TARGETS_NONE;
+
+        targets = targets.stream()
+                .flatMap(active -> Arrays.stream(Rarity.values())
+                        .filter(rarity -> !Objects.equals(rarity, Rarity.ANY) && !Objects.equals(rarity, Rarity.NONE))
+                        .map(rarity -> new Target(active, rarity)))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return targets;
+    }
+
+    private static ArrayList<Target> filterTargets(ArrayList<Target> targets) {
+        return null;
+    }
+
     private static ArrayList<Cooker> selectCookers(RecipeTemplate recipeTemplate) {
-       ArrayList<Cooker> cookers = new ArrayList<>();
-        if (!recipeTemplate.cookersIsNone()) {
-            recipeTemplate.getCookers().stream()
-                    .filter(cooker -> !(cooker.getCooker().equals(Cooker._Cooker.ANY)))
-                    .forEach(cooker -> Arrays.stream(Rarity.values())
-                            .forEach(rarity1 -> {
-                                if (rarity1 != Rarity.ANY)
-                                    cookers.add(new Cooker(cooker.getCooker(), cooker.getDifficulty(), rarity1));
-                            }));
-            return cookers;
-        } else
+        ArrayList<Cooker> cookers = recipeTemplate.getCookers();
+        if (cookers.isEmpty() || (cookers.size() == 1 && Objects.equals(cookers.get(0), COOKER_NONE)))
             return COOKERS_NONE;
+        cookers = cookers.stream()
+                .flatMap(cooker -> Arrays.stream(Rarity.values())
+                        .filter(rarity -> !Objects.equals(rarity, Rarity.ANY) && !Objects.equals(rarity, Rarity.NONE))
+                .map(rarity -> new Cooker(cooker, rarity)))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return cookers;
     }
 
     private static ArrayList<Cooker> filterCookers(ArrayList<Cooker> cookers) {
         if (ExclusionFactory.hasCookerExclusions()) {
             return cookers.stream()
                     .filter(cooker -> ExclusionFactory.getCookerExclusions().stream()
-                            .noneMatch( cookerExclusion -> {
-                                if (cookerExclusion.isAnyCooker()) {
-                                    return cookerExclusion.getCooker().equalsWithAnyCooker(cooker);
-                                } else {
-                                    return cookerExclusion.getCooker().equals(cooker);
-                                }
-                            }))
+                            .noneMatch( cookerExclusion -> cookerExclusion.equals(cooker)))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
         return cookers;
@@ -149,7 +230,32 @@ public class RecipeFactory implements Constants{
     }
 
     private static ArrayList<Ingredient> buildMandatory(Ingredient ingredient) {
+        // 1. Does ingredient template match a RecipeTemplate.result itemTemplate? Return ArrayList<RecipeTemplate>
+        ArrayList<RecipeTemplate> recipeTemplates = null;
+
         return getIngredientSubstitutes(ingredient);
+    }
+
+    private ArrayList<RecipeTemplate> getMatchingItemTemplates(Ingredient ingredient) {
+        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getImportedRecipeTemplates().stream()
+                .filter(recipeTemplate ->
+                        Objects.equals(recipeTemplate.getResult().getItemTemplate(), ingredient.getItemTemplate())
+
+                )
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return recipeTemplates;
+    }
+
+    private ArrayList<RecipeTemplate> getMatchingItemTemplates(RecipeTemplate recipeTemplate) {
+        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getImportedRecipeTemplates().stream()
+                .filter(recipeTemplate1 -> Objects.equals(recipeTemplate1.getResult().getItemTemplate(),
+                        recipeTemplate.getResult().getItemTemplate())
+
+                )
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return recipeTemplates;
     }
 
     private static ArrayList<Ingredient> buildOneOrMore(IngredientGroup ingredientGroup) {
@@ -163,7 +269,7 @@ public class RecipeFactory implements Constants{
         ArrayList<ItemTemplate> itemTemplates = selectTemplates(ingredient);
         itemTemplates = filterTemplates(itemTemplates);
 
-        ArrayList<RecipeTemplate> statesTemplates = selectRecipeFromResultItemTemplate(itemTemplates);
+        ArrayList<RecipeTemplate> statesTemplates = selectRecipeFromResult(itemTemplates, ingredient);
         statesTemplates = filterRecipeByState(statesTemplates);
 
         ArrayList<Ingredient> ingredients = makeIngredientVariantsFromMaterials(statesTemplates, ingredient);
@@ -172,6 +278,9 @@ public class RecipeFactory implements Constants{
     }
 
     private static ArrayList<ItemTemplate> selectTemplates(Ingredient ingredient) {
+
+
+
         ArrayList<ItemTemplate> itemTemplates = new ArrayList<>(Collections.singletonList(ingredient.getItemTemplate()));
         if (ingredient.getItemTemplate().isAnyFoodGrouping()) {
             itemTemplates = ingredient.getItemTemplate().getCompatibleAnyTemplates();
@@ -192,36 +301,50 @@ public class RecipeFactory implements Constants{
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private static  ArrayList<RecipeTemplate> selectRecipeFromResultItemTemplate(ArrayList<ItemTemplate> itemTemplates) {
-        return RecipeTemplate.getRecipeTemplates().stream()
+    private static  ArrayList<RecipeTemplate> selectRecipeFromResult(ArrayList<ItemTemplate> itemTemplates,
+                                                                     Ingredient ingredient) {
+        return RecipeTemplate.getImportedRecipeTemplates().stream()
                 .filter(recipeTemplate -> itemTemplates.stream()
                         .anyMatch(itemTemplate -> recipeTemplate.getResult().getItemTemplate().equals(itemTemplate)))
+                .filter(recipeTemplate -> itemTemplates.stream()
+                        .anyMatch(itemTemplate -> recipeTemplate.getResult().equals(ingredient)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static ArrayList<RecipeTemplate> filterRecipeByState(ArrayList<RecipeTemplate> statesTemplates) {
         ArrayList<IngredientExclusion> ingredientExclusions = ExclusionFactory.getIngredientExclusions().stream()
-                .filter(ingredientExclusion -> !ingredientExclusion.getIngredient().getCookedState().equals(CookedState.ANY) ||
+                .filter(ingredientExclusion -> !ingredientExclusion.getIngredient().getCookedState()
+                        .equals(CookedState.ANY)
+                        ||
                         !ingredientExclusion.getIngredient().getPreparedState().equals(PreparedState.ANY))
                 .collect(Collectors.toCollection(ArrayList::new));
         return statesTemplates.stream()
                 .filter(recipeTemplate -> ingredientExclusions.stream()
-                        .noneMatch(ingredientExclusion -> ingredientExclusion.getIngredient().getCookedState().equals(
-                                recipeTemplate.getResult().getCookedState()) ||
-                                        ingredientExclusion.getIngredient().getPreparedState().equals(
-                                                recipeTemplate.getResult().getPreparedState()
+                        .noneMatch(ingredientExclusion ->
+                                        (ingredientExclusion.getIngredient().getCookedState() != CookedState.ANY &&
+                                                ingredientExclusion.getIngredient().getCookedState()
+                                                        .equals(recipeTemplate.getResult().getCookedState()))
+                                        ||
+                                        (ingredientExclusion.getIngredient().getPreparedState() != PreparedState.ANY &&
+                                                ingredientExclusion.getIngredient().getPreparedState()
+                                                        .equals(recipeTemplate.getResult().getPreparedState()))
                                         )
-                        ))
+                        )
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private static ArrayList<Ingredient> makeIngredientVariantsFromMaterials(ArrayList<RecipeTemplate> recipeTemplates, Ingredient ingredient) {
+    private static ArrayList<Ingredient> makeIngredientVariantsFromMaterials(ArrayList<RecipeTemplate> recipeTemplates,
+                                                                             Ingredient ingredient) {
         ArrayList<Material> materials = new ArrayList<>();
+        //recipeTemplates.stream().forEach( recipeTemplate -> recipeTemplate.getResult().getReferenceMaterial() == )
+
         if (ingredient.getItemTemplate().equals(ItemTemplate.ANY_MEAT)) {
             materials = Constants.MEAT_TYPES.stream()
                     .filter(material -> ExclusionFactory.getIngredientExclusions().stream()
-                            .filter(ingredientExclusion -> !ingredientExclusion.getIngredient().getMaterial().equals(Material.ANY))
-                            .noneMatch(ingredientExclusion -> ingredientExclusion.getIngredient().getMaterial().equals(material)))
+                            .filter(ingredientExclusion -> !ingredientExclusion.getIngredient().getMaterial()
+                                    .equals(Material.ANY))
+                            .noneMatch(ingredientExclusion -> ingredientExclusion.getIngredient().getMaterial()
+                                    .equals(material)))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
 
@@ -237,8 +360,8 @@ public class RecipeFactory implements Constants{
                 .filter(recipeTemplate -> !recipeTemplate.getResult().getMaterial().equals(Material.ANY))
                 .filter(recipeTemplate -> ingredients.stream()
                         .noneMatch(ingredient1 -> ingredient1.equalsResult(recipeTemplate)))
-                .forEach(recipeTemplate -> ingredients.add(new Ingredient(recipeTemplate.getResult(), recipeTemplate.getResult().getMaterial(),
-                        LOSS_NONE, RATIO_NONE, 1)));
+                .forEach(recipeTemplate -> ingredients.add(new Ingredient(recipeTemplate.getResult(),
+                        recipeTemplate.getResult().getMaterial(), LOSS_NONE, RATIO_NONE, 1)));
 
         return ingredients;
     }

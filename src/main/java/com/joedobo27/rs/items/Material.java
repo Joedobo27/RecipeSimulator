@@ -94,7 +94,8 @@ public enum Material {
     ORANGEWOOD(88),
     RASPBERRYWOOD(90),
     BLUEBERRYWOOD(91),
-    LINGONBERRYWOOD(92);
+    LINGONBERRYWOOD(92),
+    NONE(93);
 
     private final Integer id;
 

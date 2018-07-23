@@ -6,6 +6,9 @@ import com.joedobo27.rs.templates.Cooker;
 
 import javax.json.JsonArray;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -20,9 +23,9 @@ public class CookerExclusion implements Constants {
     public static ArrayList<CookerExclusion> jsonArrayToCookerExclusion(JsonArray jsonArray) {
         ArrayList<CookerExclusion> toReturn = new ArrayList<>();
 
-        IntStream.range(0, jsonArray.size())
+        return IntStream.range(0, jsonArray.size())
                 .mapToObj(jsonArray::getJsonObject)
-                .forEach(jsonObject -> {
+                .map(jsonObject -> {
                     Cooker._Cooker cooker = Cooker._Cooker.ANY;
                     Integer difficulty = DIFFICULTY_NONE;
                     Rarity rarity = Rarity.ANY;
@@ -35,10 +38,9 @@ public class CookerExclusion implements Constants {
                     if (jsonObject.containsKey("rarity")){
                         rarity = Rarity.getRarityFromName(jsonObject.getString("rarity"));
                     }
-                    toReturn.add(new CookerExclusion(new Cooker(cooker, difficulty, rarity)));
-                });
-
-        return toReturn;
+                    return new CookerExclusion(new Cooker(cooker, difficulty, rarity));
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Cooker getCooker() {
@@ -47,5 +49,12 @@ public class CookerExclusion implements Constants {
 
     public boolean isAnyCooker() {
         return cooker.getCooker().equals(Cooker._Cooker.ANY);
+    }
+
+    public boolean isAnyRarity() { return cooker.getRarity().equals(Rarity.ANY); }
+
+    public boolean equals(Cooker cooker) {
+        return(this.isAnyCooker() || Objects.equals(this.cooker.getCooker(), cooker.getCooker())) &&
+                (this.isAnyRarity() || Objects.equals(this.cooker.getRarity(), cooker.getRarity()));
     }
 }

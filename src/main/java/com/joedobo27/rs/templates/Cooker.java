@@ -20,28 +20,44 @@ public class Cooker implements Constants, Comparable<Cooker> {
     private final Rarity rarity;
 
     static ArrayList<Cooker> jsonArrayToCookers(JsonArray jsonArray) {
-        return IntStream.range(0, jsonArray.size())
+        ArrayList<Cooker> cookers = IntStream.range(0, jsonArray.size())
                 .mapToObj(jsonArray::getJsonObject)
                 .map(Cooker::jsonObjectToContainer)
+                .filter(cooker1 -> !Objects.equals(cooker1, COOKER_NONE))
                 .collect(Collectors.toCollection(ArrayList::new));
+        if (cookers.isEmpty())
+            return COOKERS_NONE;
+        else
+            return cookers;
     }
 
     private static Cooker jsonObjectToContainer(JsonObject jsonObject) {
-        _Cooker cooker = _Cooker.ANY;
-        Integer difficulty = DIFFICULTY_NONE;
-        Rarity rarity = Rarity.COMMON;
-        if (jsonObject.containsKey("id")){
+        _Cooker cooker = COOKER_NONE.cooker;
+        Integer difficulty = COOKER_NONE.difficulty;
+        Rarity rarity = COOKER_NONE.rarity;
+        if (jsonObject.containsKey("id")) {
             cooker = _Cooker.getCookerFromName(jsonObject.getString("id"));
         }
-        if (jsonObject.containsKey("difficulty")){
+        if (jsonObject.containsKey("difficulty")) {
             difficulty = jsonObject.getInt("difficulty");
         }
+        if (jsonObject.containsKey("rarity")) {
+            rarity = Rarity.getRarityFromName(jsonObject.getString("rarity"));
+        }
+        if (Objects.equals(cooker, COOKER_NONE.cooker))
+            return COOKER_NONE;
         return new Cooker(cooker, difficulty, rarity);
     }
 
     public Cooker(_Cooker cooker, Integer difficulty, Rarity rarity) {
         this.cooker = cooker;
         this.difficulty = difficulty;
+        this.rarity = rarity;
+    }
+
+    public Cooker(Cooker cooker, Rarity rarity) {
+        this.cooker = cooker.cooker;
+        this.difficulty = cooker.difficulty;
         this.rarity = rarity;
     }
 
@@ -53,6 +69,8 @@ public class Cooker implements Constants, Comparable<Cooker> {
     public Integer getDifficulty() {
         return difficulty;
     }
+
+    public Rarity getRarity() { return rarity; }
 
     @Override
     public int compareTo(@Nonnull Cooker other) {
@@ -81,7 +99,8 @@ public class Cooker implements Constants, Comparable<Cooker> {
     }
 
     public enum _Cooker {
-        ANY(ItemTemplate.NONE),
+        NONE(ItemTemplate.NONE),
+        ANY(null),
         FORGE(ItemTemplate.FORGE),
         OVEN(ItemTemplate.OVEN),
         CAMPFIRE(ItemTemplate.CAMPFIRE),

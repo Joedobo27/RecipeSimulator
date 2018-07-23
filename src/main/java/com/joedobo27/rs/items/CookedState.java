@@ -10,18 +10,24 @@ import java.util.Objects;
  * see Item.setRightAuxData() and its uses.
  */
 public enum CookedState {
-    RAW,
-    FRIED,
-    GRILLED,
-    BOILED,
-    ROASTED,
-    STEAMED,
-    BAKED,
-    COOKED,
-    CANDIED,
-    CHOCOLATE_COATED,
-    ANY;
+    NONE(-1),
+    RAW(0),
+    FRIED(1),
+    GRILLED(2),
+    BOILED(3),
+    ROASTED(4),
+    STEAMED(5),
+    BAKED(6),
+    COOKED(7),
+    CANDIED(8),
+    CHOCOLATE_COATED(9),
+    ANY(10);
 
+    private final int id;
+
+    CookedState(int id){
+        this.id = id;
+    }
 
     public static CookedState getCookedStateFromName(String name) {
         return Arrays.stream(values())
@@ -39,5 +45,9 @@ public enum CookedState {
 
     String getName() {
         return this.name().toLowerCase().replace("_", " ").replace("0", "-");
+    }
+
+    public int getId() {
+        return id;
     }
 }

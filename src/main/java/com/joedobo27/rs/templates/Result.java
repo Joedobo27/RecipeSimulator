@@ -5,6 +5,7 @@ import com.joedobo27.rs.items.*;
 
 import javax.json.JsonObject;
 import javax.json.JsonValue;
+import java.util.Objects;
 
 public class Result implements Constants {
 
@@ -123,5 +124,13 @@ public class Result implements Constants {
 
     public Integer getDifficulty() {
         return difficulty;
+    }
+
+    public boolean equals(Ingredient ingredient){
+    return Objects.equals(this.itemTemplate, ingredient.getItemTemplate()) &&
+            Objects.equals(this.cookedState, ingredient.getCookedState()) &&
+            Objects.equals(this.preparedState, ingredient.getPreparedState()) &&
+            Objects.equals(this.material, ingredient.getMaterial()) &&
+            Objects.equals(this.realTemplate, ingredient.getRealTemplate());
     }
 }

@@ -9,7 +9,8 @@ public enum Rarity {
     RARE,
     SUPREME,
     FANTASTIC,
-    ANY;
+    ANY,
+    NONE;
 
     public static Rarity getRarityFromName(String name) {
         return Arrays.stream(values())

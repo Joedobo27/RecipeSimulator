@@ -57,10 +57,10 @@ public class Ingredient implements Constants, Comparable<Ingredient> {
     }
 
     public static Ingredient buildFromJson(JsonObject jsonObject) {
-        ItemTemplate itemTemplate = ItemTemplate.NONE;
-        CookedState cookedState = CookedState.ANY;
-        PreparedState preparedState = PreparedState.ANY;
-        Material material = Material.ANY;
+        ItemTemplate itemTemplate;
+        CookedState cookedState = CookedState.NONE;
+        PreparedState preparedState = PreparedState.NONE;
+        Material material = Material.NONE;
         ItemTemplate realTemplate = ItemTemplate.NONE;
         Integer difficulty = DIFFICULTY_NONE;
         Integer loss = LOSS_NONE;
@@ -68,6 +68,8 @@ public class Ingredient implements Constants, Comparable<Ingredient> {
         Integer amount = AMOUNT_NONE;
         if (jsonObject.containsKey("id"))
             itemTemplate = ItemTemplate.getItemTemplateFromName(jsonObject.getString("id"));
+        else
+            throw new RuntimeException("Always has id");
         if (jsonObject.containsKey("cstate")){
             cookedState = CookedState.getCookedStateFromName(jsonObject.getString("cstate"));
         }
@@ -139,5 +141,9 @@ public class Ingredient implements Constants, Comparable<Ingredient> {
                 cookedState != other.cookedState ? cookedState.compareTo(other.cookedState) :
                         preparedState != other.preparedState ? preparedState.compareTo(other.preparedState) :
                                 material.compareTo(other.material);
+    }
+
+    public ItemTemplate getRealTemplate() {
+        return realTemplate;
     }
 }

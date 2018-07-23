@@ -286,7 +286,7 @@ public enum ItemTemplate implements Constants{
     TART("tart", 1258, buildTypes(new int[]{82, 129, 76, 219, 220, 222, 233})),
     STIR_FRY("stir fry", 1259, buildTypes(new int[]{82, 129, 212, 76, 219, 222, 233})),
     NORI("nori", 1260, buildTypes(new int[]{146, 46, 113, 5, 55})),
-    ANY_MEAT("any meat", 1261, buildTypes(new int[]{207, 208, 5, 28, 223, 1261})),
+    ANY_MEAT("any meat", 1261, buildTypes(new int[]{207, 208, 5, 28, 223})),
     PIZZA("pizza", 1262, buildTypes(new int[]{82, 129, 212, 76, 219, 222})),
     ANY_OIL("any oil", 1263, buildTypes(new int[]{108, 26, 88, 34, 158, 113, 208})),
     SUSHI("sushi", 1264, buildTypes(new int[]{82, 129, 212, 76, 220, 222, 233})),
@@ -310,6 +310,7 @@ public enum ItemTemplate implements Constants{
     private final String name;
     private final int templateId;
     private final ItemTemplateType[] types;
+    private static ArrayList<ItemTemplate> itemTemplates = new ArrayList<>();
 
     ItemTemplate(String name, int templateId, ItemTemplateType[] types) {
         this.name = name;
@@ -328,20 +329,20 @@ public enum ItemTemplate implements Constants{
         return Arrays.stream(types).allMatch(itemTemplateType -> itemTemplateType == HOLLOW);
     }
 
-    boolean isFood() {
+    public boolean isFood() {
         return Arrays.stream(types).anyMatch(itemTemplateType -> itemTemplateType == FOOD ||
                 itemTemplateType == DISH);
     }
 
-    boolean isLiquidCooking() {
+    public boolean isLiquidCooking() {
         return Arrays.stream(types).anyMatch(itemTemplateType -> itemTemplateType == LIQUID_COOKING);
     }
 
-    boolean isCookingTool() {
+    public boolean isCookingTool() {
         return Arrays.stream(types).anyMatch(itemTemplateType -> itemTemplateType == TOOL_COOKING);
     }
 
-    boolean isRecipeItem() {
+    public boolean isRecipeItem() {
         return Arrays.stream(types).anyMatch(itemTemplateType -> itemTemplateType == RECIPE_ITEM);
     }
 

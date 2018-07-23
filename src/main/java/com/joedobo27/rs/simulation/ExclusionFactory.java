@@ -18,7 +18,6 @@ public class ExclusionFactory implements Constants {
     private static ArrayList<CookerExclusion> cookerExclusions = new ArrayList<>();
     private static ArrayList<IngredientExclusion> ingredientExclusions = new ArrayList<>();
 
-
     public static void importExclusions(InputStream inputStream) {
         JsonReader jsonReader = Json.createReader(inputStream);
         JsonObject jsonObject = jsonReader.readObject();

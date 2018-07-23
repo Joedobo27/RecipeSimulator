@@ -19,9 +19,9 @@ public class RecipeSimulator {
         InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream("exclusions.json");
         ExclusionFactory.importExclusions(inputStream);
 
-        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getRecipeTemplates();
-        RecipeTemplate template = RecipeTemplate.getRecipeTemplates().stream()
-                .filter(recipeTemplate -> recipeTemplate.getRecipeId() == 1355)
+        ArrayList<RecipeTemplate> recipeTemplates = RecipeTemplate.getImportedRecipeTemplates();
+        RecipeTemplate template = RecipeTemplate.getImportedRecipeTemplates().stream()
+                .filter(recipeTemplate -> recipeTemplate.getRecipeId() == Recipe.CHOPPED_VEG.getId())
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
         RecipeFactory.buildRecipe(template);

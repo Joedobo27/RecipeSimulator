@@ -21,9 +21,9 @@ public class IngredientGroup implements Constants{
 
     static ArrayList<IngredientGroup> buildFromJson(JsonObject jsonObject) {
         IngredientGroup mandatory = IngredientGroup.INGREDIENT_GROUP_NONE;
-        ArrayList<IngredientGroup> zeroorone = new ArrayList<>();
-        ArrayList<IngredientGroup> oneof = new ArrayList<>();
-        ArrayList<IngredientGroup> oneormore = new ArrayList<>();
+        ArrayList<IngredientGroup> zeroOrOne = INGREDIENT_GROUPS_NONE;
+        ArrayList<IngredientGroup> oneOf = INGREDIENT_GROUPS_NONE;
+        ArrayList<IngredientGroup> oneOrMore = INGREDIENT_GROUPS_NONE;
         IngredientGroup optional = IngredientGroup.INGREDIENT_GROUP_NONE;
         IngredientGroup any = IngredientGroup.INGREDIENT_GROUP_NONE;
 
@@ -37,7 +37,7 @@ public class IngredientGroup implements Constants{
             if (jsonObject.get("zeroorone").getValueType() == JsonObject.ValueType.ARRAY) {
                 JsonArray jsonArray = jsonObject.getJsonArray("zeroorone");
                 jsonArray.stream().map(jsonValue -> (JsonObject) jsonValue)
-                        .forEach(jsonObject1 -> zeroorone.add(new IngredientGroup(_IngredientGroup.ZEROORONE,
+                        .forEach(jsonObject1 -> zeroOrOne.add(new IngredientGroup(_IngredientGroup.ZEROORONE,
                                     jsonArrayToIngredients(jsonObject1.getJsonArray("list")))));
             }
         }
@@ -45,7 +45,7 @@ public class IngredientGroup implements Constants{
             if (jsonObject.get("oneof").getValueType() == JsonObject.ValueType.ARRAY){
                 JsonArray jsonArray = jsonObject.getJsonArray("oneof");
                 jsonArray.stream().map(jsonValue -> (JsonObject) jsonValue)
-                        .forEach(jsonObject1 -> oneof.add(new IngredientGroup(_IngredientGroup.ONEOF,
+                        .forEach(jsonObject1 -> oneOf.add(new IngredientGroup(_IngredientGroup.ONEOF,
                                 jsonArrayToIngredients(jsonObject1.getJsonArray("list")))));
             }
         }
@@ -53,7 +53,7 @@ public class IngredientGroup implements Constants{
             if (jsonObject.get("oneormore").getValueType() == JsonObject.ValueType.ARRAY){
                 JsonArray jsonArray = jsonObject.getJsonArray("oneormore");
                 jsonArray.stream().map(jsonValue -> (JsonObject) jsonValue)
-                        .forEach(jsonObject1 -> oneormore.add(new IngredientGroup(_IngredientGroup.ONEORMORE,
+                        .forEach(jsonObject1 -> oneOrMore.add(new IngredientGroup(_IngredientGroup.ONEORMORE,
                                 jsonArrayToIngredients(jsonObject1.getJsonArray("list")))));
             }
         }
@@ -74,12 +74,12 @@ public class IngredientGroup implements Constants{
         ArrayList<IngredientGroup> ingredientGroups = new ArrayList<>();
         if (mandatory != INGREDIENT_GROUP_NONE)
             ingredientGroups.add(mandatory);
-        if (!zeroorone.isEmpty())
-            ingredientGroups.addAll(zeroorone);
-        if (!oneof.isEmpty())
-            ingredientGroups.addAll(oneof);
-        if (!oneormore.isEmpty())
-            ingredientGroups.addAll(oneormore);
+        if (!zeroOrOne.isEmpty())
+            ingredientGroups.addAll(zeroOrOne);
+        if (!oneOf.isEmpty())
+            ingredientGroups.addAll(oneOf);
+        if (!oneOrMore.isEmpty())
+            ingredientGroups.addAll(oneOrMore);
         if (optional != INGREDIENT_GROUP_NONE)
             ingredientGroups.add(optional);
         if (any != INGREDIENT_GROUP_NONE)
